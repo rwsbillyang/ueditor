@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import com.baidu.ueditor.ConfigManager;
 import com.baidu.ueditor.PathFormat;
 import com.baidu.ueditor.define.AppInfo;
 import com.baidu.ueditor.define.BaseState;
@@ -88,11 +89,11 @@ public class ImageHunter {
 			
 			String savePath = this.getPath( this.savePath, this.filename, suffix );
 			String physicalPath = this.rootPath + savePath;
-
-			State state = StorageManager.saveFileByInputStream( connection.getInputStream(), physicalPath );
+			String formattedSavePath = PathFormat.format(savePath);
+			State state = StorageManager.saveFileByInputStream( connection.getInputStream(), physicalPath ,formattedSavePath);
 			
 			if ( state.isSuccess() ) {
-				state.putInfo( "url", PathFormat.format( savePath ) );
+				if(!ConfigManager.ENABLE_COS)  state.putInfo( "url", formattedSavePath );
 				state.putInfo( "source", urlStr );
 			}
 			

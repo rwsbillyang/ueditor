@@ -1,11 +1,5 @@
 package com.baidu.ueditor.upload;
 
-import com.baidu.ueditor.PathFormat;
-import com.baidu.ueditor.define.AppInfo;
-import com.baidu.ueditor.define.BaseState;
-import com.baidu.ueditor.define.FileType;
-import com.baidu.ueditor.define.State;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
@@ -19,20 +13,46 @@ import org.apache.commons.fileupload.FileItemStream;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.baidu.ueditor.ConfigManager;
+import com.baidu.ueditor.PathFormat;
+import com.baidu.ueditor.define.AppInfo;
+import com.baidu.ueditor.define.BaseState;
+import com.baidu.ueditor.define.FileType;
+import com.baidu.ueditor.define.State;
 
 public class BinaryUploader {
-
+	private static Logger log = LoggerFactory.getLogger(BinaryUploader.class);
+	
+	
+	 public static final boolean isMultipartContent(HttpServletRequest request) {
+	        if (!"POST".equalsIgnoreCase(request.getMethod())) {
+	            return false;
+	        }
+	        String contentType = request.getContentType();
+	        if (contentType == null) {
+	            return false;
+	        }
+	        if (contentType.toLowerCase().startsWith("multipart/")) {
+	            return true;
+	        }
+	        return false;
+	    }
+	 
 	public static final State save(HttpServletRequest request,
 			Map<String, Object> conf) {
 		FileItemStream fileStream = null;
 		boolean isAjaxUpload = request.getHeader( "X_Requested_With" ) != null;
 
-		if (!ServletFileUpload.isMultipartContent(request)) {
+		
+		if (!isMultipartContent(request)) {
+			log.error("NOT_MULTIPART_CONTENT when upload");
 			return new BaseState(false, AppInfo.NOT_MULTIPART_CONTENT);
 		}
 
-		ServletFileUpload upload = new ServletFileUpload(
-				new DiskFileItemFactory());
+		ServletFileUpload upload = new ServletFileUpload(new DiskFileItemFactory());
 
         if ( isAjaxUpload ) {
             upload.setHeaderEncoding( "UTF-8" );
@@ -69,15 +89,18 @@ public class BinaryUploader {
 
 			savePath = PathFormat.parse(savePath, originFileName);
 
-			String physicalPath = (String) conf.get("rootPath") + savePath;
+			//modified by Ternence
+            String rootPath = ConfigManager.getRootPath(request,conf);
+            String physicalPath = rootPath + savePath;
+            String formattedSavePath = PathFormat.format(savePath);
 
 			InputStream is = fileStream.openStream();
-			State storageState = StorageManager.saveFileByInputStream(is,
-					physicalPath, maxSize);
+			State storageState = StorageManager.saveFileByInputStream(is,physicalPath, maxSize,formattedSavePath);
 			is.close();
 
 			if (storageState.isSuccess()) {
-				storageState.putInfo("url", PathFormat.format(savePath));
+				// 上传云端后自动将url写入storageState
+				//storageState.putInfo("url", formattedSavePath);
 				storageState.putInfo("type", suffix);
 				storageState.putInfo("original", originFileName + suffix);
 			}
