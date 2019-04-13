@@ -192,8 +192,8 @@
         //]
 
         //fontsize
-        //字号
-        //,'fontsize':[10, 11, 12, 14, 16, 18, 20, 24, 36]
+        //字号 add more font sizes
+        ,'fontsize':[10, 11, 12,13,14,15,16,17,18,19,20,22,24,36]
 
         //paragraph
         //段落格式 值留空时支持多语言自动识别，若配置，则以配置值为准
@@ -344,8 +344,9 @@
         //    'anchor':'~/dialogs/anchor/anchor.html',
         //}
 
-        //allowLinkProtocol 允许的链接地址，有这些前缀的链接地址不会自动添加http
-        //, allowLinkProtocols: ['http:', 'https:', '#', '/', 'ftp:', 'mailto:', 'tel:', 'git:', 'svn:']
+        //allowLinkProtocol 允许的链接地址，有这些前缀的链接地址不会自动添加http  add '//'
+        , allowLinkProtocols: ['http:', 'https:', '#','//', '/', 'ftp:', 'mailto:', 'tel:', 'git:', 'svn:']
+
 
         //webAppKey 百度应用的APIkey，每个站长必须首先去百度官网注册一个key后方能正常使用app功能，注册介绍，http://app.baidu.com/static/cms/getapikey.html
         //, webAppKey: ""
@@ -400,7 +401,7 @@
 			header: [],
 			hr:     [],
 			i:      ['class', 'style'],
-			img:    ['src', 'alt', 'title', 'width', 'height', 'id', '_src', 'loadingclass', 'class', 'data-latex'],
+			img:    ['src', 'alt', 'title', 'width', 'height', 'id', '_src', 'loadingclass', 'class', 'data-latex',"_url"],
 			ins:    ['datetime'],
 			li:     ['class', 'style'],
 			mark:   [],
@@ -409,7 +410,7 @@
 			p:      ['class', 'style'],
 			pre:    ['class', 'style'],
 			s:      [],
-			section:[],
+			section:['class', 'style'],
 			small:  [],
 			span:   ['class', 'style'],
 			sub:    ['class', 'style'],
@@ -425,7 +426,10 @@
 			tt:     [],
 			u:      [],
 			ul:     ['class', 'style'],
-			video:  ['autoplay', 'controls', 'loop', 'preload', 'src', 'height', 'width', 'class', 'style']
+            video:  ['autoplay', 'controls', 'loop', 'preload', 'src', 'height', 'width', 'class', 'style'],
+            iframe: ['src','frameborder','allowFullScreen', 'height', 'width', 'class', 'style'],
+			source: ['src', 'type'],
+			embed: ['type', 'class', 'pluginspage', 'src', 'width', 'height', 'align', 'style', 'wmode', 'play', 'loop', 'menu', 'allowscriptaccess', 'allowfullscreen']
 		}
     };
 

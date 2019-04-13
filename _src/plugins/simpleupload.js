@@ -96,7 +96,18 @@ UE.plugin.register('simpleupload', function (){
                         });
                     }
                 }
-
+                var  errorHandler = function(title) {
+                    console.log("errorHandler,title="+title);
+                    var loader = me.document.getElementById(loadingId);
+                    loader && domUtils.remove(loader);
+                    me.fireEvent('showmessage', {
+                        'id': loadingId,
+                        'content': title,
+                        'type': 'error',
+                        'timeout': 4000
+                    });
+                };
+                
                 /* 判断后端配置是否没有加载成功 */
                 if (!me.getOpt('imageActionName')) {
                     errorHandler(me.getLang('autoupload.errorLoadConfig'));
