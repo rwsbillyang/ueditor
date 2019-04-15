@@ -15,7 +15,6 @@ import com.baidu.ueditor.ConfigManager;
 import com.baidu.ueditor.define.AppInfo;
 import com.baidu.ueditor.define.BaseState;
 import com.baidu.ueditor.define.State;
-import com.utils.CosUtil;
 
 public class StorageManager {
 	private static Logger log = LoggerFactory.getLogger(StorageManager.class);
@@ -48,7 +47,7 @@ public class StorageManager {
 			return new BaseState(false, AppInfo.IO_ERROR);
 		}
 
-		if(ConfigManager.ENABLE_COS)
+		if(ConfigManager.ENABLE_COS && ConfigManager.cloudStroage!=null)
 		{
 			return uploadToCOS(file, formattedSavePath);	
 		}
@@ -169,7 +168,7 @@ public class StorageManager {
 			} else {
 				FileUtils.moveFile(tmpFile, targetFile);
 			}
-			if(ConfigManager.ENABLE_COS)
+			if(ConfigManager.ENABLE_COS && ConfigManager.cloudStroage!=null)
 			{
 				return uploadToCOS(targetFile, formattedSavePath);	
 			}
@@ -193,7 +192,7 @@ public class StorageManager {
 		String cosKey = formattedSavePath;
 		if(cosKey.startsWith("/")) cosKey = cosKey.substring(1);	
 		
-		String url = CosUtil.upload(file, cosKey);
+		String url = ConfigManager.cloudStroage.upload(file, cosKey);
 		if(url==null) { 
 			log.error("fail to upload file to cos,file="+file.getAbsolutePath());
 			return new BaseState(false, AppInfo.COS_UPLOAD_ERROR);	

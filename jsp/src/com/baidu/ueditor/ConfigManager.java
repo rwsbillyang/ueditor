@@ -32,7 +32,8 @@ public final class ConfigManager {
 	private static Logger log = LoggerFactory.getLogger(ConfigManager.class);
 	//是否激活云对象存储
 	public static boolean ENABLE_COS=true;
-  private String webId;
+	public static CloudStorageInteface  cloudStroage = null;
+	private String webId;
     
 	private final String rootPath;
 	private final String originalPath;

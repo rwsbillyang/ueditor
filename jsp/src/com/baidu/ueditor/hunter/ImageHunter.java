@@ -93,7 +93,7 @@ public class ImageHunter {
 			State state = StorageManager.saveFileByInputStream( connection.getInputStream(), physicalPath ,formattedSavePath);
 			
 			if ( state.isSuccess() ) {
-				if(!ConfigManager.ENABLE_COS)  state.putInfo( "url", formattedSavePath );
+				if(!ConfigManager.ENABLE_COS && ConfigManager.cloudStroage!=null)  state.putInfo( "url", formattedSavePath );
 				state.putInfo( "source", urlStr );
 			}
 			
