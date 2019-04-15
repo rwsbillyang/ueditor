@@ -19,7 +19,10 @@ The update is based on branch dev-1.4.3.3
 you can enable COS support in your code, the default value is true.
 
 Java backend usage steps:
-
+- Step0: after clone, switch to the branch dev-1.4.3.3
+```
+    git checkout dev-1.4.3.3
+```
 - Step1: compile and install
 ```
 cd jsp
